@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="xatid" content="281199">
+        <meta name="xatuser" content="Paulo">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>xatspace</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+            body{
+                font-family: 'Roboto Condensed', sans-serif;
+                background-color: #111;
+                color: #ccc;
+            }
+            .text-center{
+                text-align: center;
+            }
+            .mt{
+                margin-top: 10rem;
+            }
+            .boxes{
+                display: flex;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .box{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 10rem;
+                height: 10rem;
+                margin: 1rem;
+                background-color: #222;
+                border-radius: 1rem;
+                text-decoration: none;
+                color: #ccc;
+                font-size: 1.5rem;
+                font-weight: bold;
+                transition: all 0.2s ease-in-out;
+            }
+            .box:hover{
+                background-color: #333;
+            }
+            .iam {
+                font-size: 2.5rem;
+                font-weight: bold;
+                margin-bottom: 0;
+            }
+            .mystatus {
+                width: 150px;
+            }
+            .text-red {
+                color: #f00;
+            }
+            .text-green {
+                color: #0f0;
+            }
+            .text-orange{
+                color: #ff8c00;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="text-center mt">
+            <h2 class="userinfo"></h2>
+            <div class="boxes">
+                <a class="box" target="_blank" href="https://xat.com/Blog">xatBlog</a>
+                <a class="box" target="_blank" href="https://xatimg.com">xatImages</a>
+                <a class="box" target="_blank" href="https://mundosmilies.com">Mundosmilies</a>
+                <a class="box" target="_blank" href="https://oceanbot.net">OceanBot</a>
+            </div>
+            <div class="status">
+                <h2 class="iam">Actually, I am <span class="current-status">[loading]</span></h2>
+            </div>
+        </div>
+        <script>
+            const xatID = document.querySelector('meta[name="xatid"]').content;
+            const xatUser = document.querySelector('meta[name="xatuser"]').content;
+            const userinfo = document.querySelector('.userinfo');
+
+            userinfo.innerHTML = `${xatUser} (${xatID})`;
+
+            function setStatus(status){
+                const currentStatus = document.querySelector('.current-status');
+                if (status === 'available') {
+                    currentStatus.classList.add('text-orange');
+                    currentStatus.innerHTML = 'Available';
+                } else if (status === 'online') {
+                    currentStatus.classList.add('text-green');
+                    currentStatus.innerHTML = 'Online';
+                } else {
+                    currentStatus.classList.add('text-red');
+                    currentStatus.innerHTML = 'Offline';
+                }
+            }
+
+            fetch(`https://oceanbot.net/online.php?id=${xatID}`)
+                .then(response => response.json())
+                .then(data => {
+                    const status = data.status;
+                    const currentStatus = document.querySelector('.current-status');
+                    if (status === 'available') {
+                        setStatus('available');
+                    } else if (status === 'online') {
+                        setStatus('online');
+                    } else {
+                        setStatus('offline');
+                    }
+                });
+        </script>
+    </body>
+</html>
